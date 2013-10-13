@@ -1,9 +1,14 @@
+=== play ===
+http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816888559042-xml
+act=play&arg=/media/films/South%20Park%20season%2015%20%281280x720%29%20Phr0stY%5D/S15E02%20South%20Park%20Funnybot%20%281280x720%29%20%5BPhr0stY%5D.mkv
+
 === pause ===
 POST
 http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816888039770-xml
 act=pause&arg=undefined
 
-=== play ===
-http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816888559042-xml
-act=play&arg=/media/films/South%20Park%20season%2015%20%281280x720%29%20Phr0stY%5D/S15E02%20South%20Park%20Funnybot%20%281280x720%29%20%5BPhr0stY%5D.mkv
+=== stop ===
+POST
+http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816888039770-xml
+act=stop&arg=undefined
 
