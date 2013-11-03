@@ -20,7 +20,9 @@ void setup() {
 }
 
 void exit() {
-  httpClient.getConnectionManager().shutdown();
+  if(httpClient != null){
+    httpClient.getConnectionManager().shutdown();
+  }
 }
 
 
@@ -50,20 +52,25 @@ void mousePressed() {
 }
 
 void sendToServer(String command) {
-  HttpPost httpPost   = new HttpPost();
-  HttpParams postParams = new BasicHttpParams();
-  postParams.setParameter( "act", command );
-  postParams.setParameter( "arg", "undefined" ); 
-  httpPost.setParams( postParams );
+  try {
+    HttpPost httpPost   = new HttpPost();
+    HttpParams postParams = new BasicHttpParams();
+    postParams.setParameter( "act", command );
+    postParams.setParameter( "arg", "undefined" ); 
+    httpPost.setParams( postParams );
 
-  HttpResponse response = httpClient.execute( httpPost );
-  HttpEntity   entity   = response.getEntity();
+    HttpResponse response = httpClient.execute( httpPost );
+    HttpEntity   entity   = response.getEntity();
 
-  println("----------------------------------------");
-  println( response.getStatusLine() );
-  println("----------------------------------------");
+    println("----------------------------------------");
+    println( response.getStatusLine() );
+    println("----------------------------------------");
 
-  if ( entity != null ) entity.writeTo( System.out );
-  if ( entity != null ) entity.consumeContent();
+    if ( entity != null ) entity.writeTo( System.out );
+    if ( entity != null ) entity.consumeContent();
+  } 
+  catch (IOException io) {
+    io.printStackTrace();
+  }
 }
 
