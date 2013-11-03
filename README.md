@@ -12,3 +12,6 @@ Next steps:
 5. Implement history and current playing remembering. 
 6. Resume playing after long break/switch off raspberry device.
 7. Search forward/backward controls.
+
+
+![Plan](https://github.com/mgalushka/omxplayer-remote-android/raw/master/doc/plan.png)
