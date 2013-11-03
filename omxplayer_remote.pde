@@ -20,8 +20,8 @@ void setup() {
 }
 
 void exit() {
-  if(httpClient != null){
-    httpClient.getConnectionManager().shutdown();
+  if (httpClient != null) {
+    //httpClient.getConnectionManager().shutdown();
   }
 }
 
@@ -53,7 +53,8 @@ void mousePressed() {
 
 void sendToServer(String command) {
   try {
-    HttpPost httpPost   = new HttpPost();
+    println("Execute command: " + command);
+    HttpPost httpPost   = new HttpPost(ROOT);
     HttpParams postParams = new BasicHttpParams();
     postParams.setParameter( "act", command );
     postParams.setParameter( "arg", "undefined" ); 
