@@ -5,11 +5,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 DefaultHttpClient httpClient;
 String url = "http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816901606273-xml";
-HttpPost          httpPost;
+HttpPost httpPost;
 
 void setup() {
- 
-  
   try
   {
     httpClient = new DefaultHttpClient();
@@ -47,10 +45,9 @@ void draw() {
 
 void mousePressed() {
   try{
-   HttpResponse response = httpClient.execute( httpPost );
+    HttpResponse response = httpClient.execute( httpPost );
     HttpEntity   entity   = response.getEntity();
-    
-    
+        
     println("----------------------------------------");
     println( response.getStatusLine() );
     println("----------------------------------------");
