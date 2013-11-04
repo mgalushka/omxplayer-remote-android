@@ -74,6 +74,7 @@ void onKetaiListSelection(KetaiList klist)
 void mousePressed() {
   try {
     //sendToServer("pause");
+    browse("path");
   } 
   catch (Exception e) {
     e.printStackTrace();
@@ -82,7 +83,7 @@ void mousePressed() {
 
 void browse(String path) {
   try {
-    println("Send get request for path: " + path);
+    println("Send get request for path: " + ROOT);
     HttpGet httpGet   = new HttpGet(ROOT);
 
     HttpResponse response = httpClient.execute( httpGet );
