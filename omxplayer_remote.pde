@@ -14,6 +14,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gson.Gson;
+
 DefaultHttpClient httpClient;
 
 //String ROOT = "http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816901606273-xml";
@@ -113,13 +115,22 @@ void sendToServer(String command) {
 
     HttpResponse response = httpClient.execute( httpPost );
     HttpEntity   entity   = response.getEntity();
+    
+    Gson gson = new Gson(); // Or use new GsonBuilder().create();
 
     println("----------------------------------------");
     println( response.getStatusLine() );
     println("----------------------------------------");
 
-    if ( entity != null ) entity.writeTo( System.out );
-    if ( entity != null ) entity.consumeContent();
+    String json = EntityUtils.toString(entity);
+    println ("json = " + json);
+    
+    FileSystem fs = gson.fromJson(json, FileSystem.class);
+    
+    println (fs);
+
+    //if ( entity != null ) entity.writeTo( System.out );
+    //if ( entity != null ) entity.consumeContent();
   } 
   catch (IOException io) {
     io.printStackTrace();
