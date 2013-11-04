@@ -15,15 +15,19 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 DefaultHttpClient httpClient;
-String ROOT = "http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816901606273-xml";
+
+//String ROOT = "http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816901606273-xml";
+String ROOT = "http://192.168.1.103/omxplayer-web-controls-php/open.php?path=";
+
 
 KetaiList filesystemList;
+ArrayList lst = new ArrayList();
 
 void setup() {
   try
   {
     httpClient = new DefaultHttpClient();
-    ArrayList lst = new ArrayList();
+    
     lst.add("/media/films");
     lst.add("/media/video");
     filesystemList = new KetaiList(this, lst);
@@ -46,6 +50,7 @@ void exit() {
 void draw() {
   background(255);
   fill(0);
+  //filesystemList = new KetaiList(this, lst);
 }
 
 void keyPressed() {
@@ -56,23 +61,45 @@ void keyPressed() {
   if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
     println ("Volume up");
     sendToServer("+");
-  }
+  }  
 }
 
 void onKetaiListSelection(KetaiList klist)
 {
   String path = klist.getSelection();  
-  println("Chosen path: " + path);
+  println("Browse path: " + path);
+  browse(path);
 }
 
 void mousePressed() {
   try {
-    sendToServer("pause");
+    //sendToServer("pause");
   } 
   catch (Exception e) {
     e.printStackTrace();
   }
 }
+
+void browse(String path) {
+  try {
+    println("Send get request for path: " + path);
+    HttpGet httpGet   = new HttpGet(ROOT);
+
+    HttpResponse response = httpClient.execute( httpGet );
+    HttpEntity   entity   = response.getEntity();
+
+    println("----------------------------------------");
+    println( response.getStatusLine() );
+    println("----------------------------------------");
+
+    if ( entity != null ) entity.writeTo( System.out );
+    if ( entity != null ) entity.consumeContent();
+  } 
+  catch (IOException io) {
+    io.printStackTrace();
+  }
+}
+
 
 void sendToServer(String command) {
   try {
