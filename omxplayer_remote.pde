@@ -8,6 +8,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 
+int W,H;
+
+PImage PLAY;
+PImage PAUSE;
+PImage STOP;
+
+
 RemoteControl remote;
 
 // list of filesystem objects
@@ -23,6 +30,13 @@ String DEFAULT_BROWSE_ROOT = "/";
 boolean playingMode = false;
 
 void setup() {
+  W = width;
+  H = height;
+  
+  PLAY = loadImage("play.png");
+  PAUSE = loadImage("pause.png");
+  STOP = loadImage("stop.png");
+  
   try
   {
     remote = new RemoteControl();
@@ -45,6 +59,8 @@ void draw() {
     // draw playing controls here
     background(255);
     fill(0);
+    
+    image(PLAY, W/2 - 32, H/2 - 32);
   }
 }
 
