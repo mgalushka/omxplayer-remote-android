@@ -20,6 +20,8 @@ public class RemoteControl {
 
   public FileSystem browse(String path) {
     // TODO: this is stub
+    // TODO: in case of delays from rest service - implement timeout action
+    // propose the user to remount/reboot raspberry device 
     FileSystem result = new FileSystem("/media");
     
     FileItem dir = new FileItem("/media/films", "files", "DIR");

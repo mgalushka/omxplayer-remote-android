@@ -32,14 +32,14 @@ void setup() {
     remote = new RemoteControl();
     remote.init();
 
-    // TODO: persist this betwwen application runs
+    // TODO: persist latest browsed path between application runs
     fileSystem = remote.browse(DEFAULT_BROWSE_ROOT);  
     filesystemList = new KetaiList(this, fileSystem.ketaiList());
 
     background(0);  
     rectMode(CENTER);
   } 
-  catch( Exception e ) { 
+  catch(Exception e) { 
     e.printStackTrace();
   }
 }
