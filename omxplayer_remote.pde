@@ -10,10 +10,17 @@ import com.google.gson.Gson;
 
 int W,H;
 
+PImage SPEAKER;
+PImage MUTED;
+
 PImage PLAY;
 PImage PAUSE;
 PImage STOP;
 
+PImage REWIND_LEFT;
+PImage REWIND_MORE_LEFT;
+PImage REWIND_RIGHT;
+PImage REWIND_MORE_RIGHT;
 
 RemoteControl remote;
 
@@ -33,9 +40,18 @@ void setup() {
   W = width;
   H = height;
   
+  SPEAKER = loadImage("speaker.png");
+  MUTED = loadImage("muted.png");
+  
   PLAY = loadImage("play.png");
   PAUSE = loadImage("pause.png");
   STOP = loadImage("stop.png");
+  
+  REWIND_LEFT = loadImage("rewind_left.png");
+  REWIND_MORE_LEFT = loadImage("rewind_more_left.png");
+  REWIND_RIGHT = loadImage("rewind_left.png");
+  REWIND_MORE_RIGHT = loadImage("rewind_more_left.png");
+  
   
   try
   {
@@ -60,8 +76,18 @@ void draw() {
     background(255);
     fill(0);
     
-    image(PLAY, W/2 - 32, H/2 - 32);
-    image(STOP, W - 2*64, H - 2*64);
+    imageMode(CENTER);
+    image(PLAY, W/2, H/2 + 64);
+    image(STOP, W - 3*32, H - 3*32);
+    
+    image(REWIND_MORE_LEFT, W - 3*32, 3*32);
+    image(REWIND_LEFT, W - 8*32, 3*32);
+    
+    image(REWIND_MORE_RIGHT, 3*32, 3*32);
+    image(REWIND_RIGHT, 8*32, 3*32);
+    
+    image(SPEAKER, W - 3*32, 8*32);
+    
   }
 }
 
