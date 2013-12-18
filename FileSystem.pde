@@ -29,10 +29,10 @@ public class FileSystem {
   public ArrayList ketaiList(){
     ArrayList<String> result = new ArrayList<String>();
     for(FileItem item : content){
-      if(item.getType().equals("DIR")){
+      if("DIR".equals(item.getType())){
         result.add(item.getPath());
       }
-      if(item.getType().equals("FILE")){
+      if("FILE".equals(item.getType())){
         result.add(item.getName());
       }
     }

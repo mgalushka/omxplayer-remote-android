@@ -70,13 +70,14 @@ void onKetaiListSelection(KetaiList klist)
   println("Selected path: " + path);
 
   FileItem item = fileSystem.find(path);
-  if (item.getType().equals("DIR")) {
+  if ("DIR".equals(item.getType())) {
     print("going deeper level to: " + item.getPath());
     fileSystem = remote.browse(item.getPath());  
     filesystemList = new KetaiList(this, fileSystem.ketaiList());
   }
-  if (item.getType().equals("FILE")) {
+  if ("FILE".equals(item.getType())) {
     print("Open file for playing in omxplayer: " + item.getPath());
+    filesystemList = new KetaiList(this, fileSystem.ketaiList());
   }
 }
 
