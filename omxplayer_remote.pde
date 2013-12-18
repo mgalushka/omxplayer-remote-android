@@ -61,6 +61,7 @@ void draw() {
     fill(0);
     
     image(PLAY, W/2 - 32, H/2 - 32);
+    image(STOP, W - 2*64, H - 2*64);
   }
 }
 
