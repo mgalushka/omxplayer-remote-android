@@ -17,8 +17,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
 
 RemoteControl remote;
+
+// list of filesystem objects
 KetaiList filesystemList;
 ArrayList lst = new ArrayList();
+
+String DEFAULT_BROWSE_ROOT = "/";
 
 void setup() {
   try
@@ -26,10 +30,10 @@ void setup() {
     remote = new RemoteControl();
     remote.init();
 
-    lst.add("/media/films");
-    lst.add("/media/video");
-    filesystemList = new KetaiList(this, lst);
-
+    // TODO: persist this betwwen application runs
+    ArrayList first = remote.browse(DEFAULT_BROWSE_ROOT);  
+    filesystemList = new KetaiList(this, first);
+    
     background(0);  
     rectMode(CENTER);
   } 
@@ -43,10 +47,11 @@ void setup() {
 void draw() {
   background(255);
   fill(0);
-  //filesystemList = new KetaiList(this, lst);
 }
 
 void keyPressed() {
+  
+  // sound controls
   if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
     println ("Volume down");
     remote.sendToServer("-");
@@ -61,16 +66,12 @@ void onKetaiListSelection(KetaiList klist)
 {
   String path = klist.getSelection();  
   println("Browse path: " + path);
-  remote.browse(path);
+  ArrayList deeper = remote.browse(path);  
+  filesystemList = new KetaiList(this, deeper);
 }
 
 void mousePressed() {
-  try {
-    remote.browse("path");
-  } 
-  catch (Exception e) {
-    e.printStackTrace();
-  }
+
 }
 
 void exit() {

@@ -18,7 +18,11 @@ public class RemoteControl {
   public void execute(Action action) {
   }
 
-  public void browse(String path) {
+  public ArrayList browse(String path) {
+    return new ArrayList(Arrays.asList("/media/films", "/media/video"));
+  }
+
+  public void browseCall(String path) {
     try {
       println("Send get request for path: " + ROOT);
       HttpGet httpGet   = new HttpGet(ROOT);
