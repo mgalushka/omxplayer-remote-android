@@ -1,16 +1,8 @@
-import ketai.camera.*;
-import ketai.net.nfc.record.*;
 import ketai.net.*;
 import ketai.ui.*;
-import ketai.cv.facedetector.*;
-import ketai.sensors.*;
-import ketai.net.nfc.*;
-import ketai.net.wifidirect.*;
 import ketai.data.*;
-import ketai.net.bluetooth.*;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import org.apache.http.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -25,6 +17,10 @@ KetaiList filesystemList;
 FileSystem fileSystem;
 
 String DEFAULT_BROWSE_ROOT = "/";
+
+// flag shows if we are in playing mode for film
+// should be persistable bewteen apllication runs/or retrievable from raspberry service rest call
+boolean playingMode = false;
 
 void setup() {
   try
@@ -44,11 +40,12 @@ void setup() {
   }
 }
 
-
-
 void draw() {
-  background(255);
-  fill(0);
+  if(playingMode){
+    // draw playing controls here
+    background(255);
+    fill(0);
+  }
 }
 
 void keyPressed() {
@@ -79,11 +76,17 @@ void onKetaiListSelection(KetaiList klist)
   }
   if ("FILE".equals(item.getType())) {
     print("Open file for playing in omxplayer: " + item.getPath());
+    
+    // open menu for remote controlling film
     filesystemList = new KetaiList(this, fileSystem.ketaiList());
   }
 }
 
 void mousePressed() {
+  if(playingMode){
+    // count click point and action accordingly
+    print("Clicked menu: [" + mouseX + ", " + mouseY + "]");
+  }
 }
 
 void exit() {
