@@ -94,7 +94,8 @@ void onKetaiListSelection(KetaiList klist)
     print("Open file for playing in omxplayer: " + item.getPath());
     
     // open menu for remote controlling film
-    filesystemList = new KetaiList(this, fileSystem.ketaiList());
+    filesystemList = null;
+    playingMode = true;
   }
 }
 
