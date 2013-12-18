@@ -10,7 +10,7 @@ public class RemoteControl {
   public void init() {
     httpClient = new DefaultHttpClient();
   }
-  
+
   public void clear() {
     httpClient = null;
   }
@@ -18,8 +18,18 @@ public class RemoteControl {
   public void execute(Action action) {
   }
 
-  public ArrayList browse(String path) {
-    return new ArrayList(Arrays.asList("/media/films", "/media/video"));
+  public FileSystem browse(String path) {
+    FileSystem result = new FileSystem("/media");
+    
+    FileItem dir = new FileItem("/media/films", "files", "DIR");
+    FileItem file = new FileItem("/media/films/1.avi", "1.avi", "FILE");
+
+    List<FileItem> items = new ArrayList<FileItem>();
+    items.add(dir);
+    items.add(file);
+
+    result.setContent(items);
+    return result; //new ArrayList(Arrays.asList("/media/films", "/media/video"));
   }
 
   public void browseCall(String path) {

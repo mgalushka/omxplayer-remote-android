@@ -1,12 +1,15 @@
 import java.util.*;
 
 public class FileSystem {
+  
+  // root path for current snapshot
   private String path;
 
   // List<FileItem>
-  private List content;
+  private List<FileItem> content;
 
-  public FileSystem() {
+  public FileSystem(String _path) {
+    this.path = _path;
   }
 
   public String getPath() {
@@ -21,6 +24,28 @@ public class FileSystem {
   }
   public void setContent(List content) {
     this.content = content;
+  }
+
+  public ArrayList ketaiList(){
+    ArrayList<String> result = new ArrayList<String>();
+    for(FileItem item : content){
+      if(item.getType().equals("DIR")){
+        result.add(item.getPath());
+      }
+      if(item.getType().equals("FILE")){
+        result.add(item.getName());
+      }
+    }
+    return result;
+  }
+  
+  public FileItem find(String path){
+    for(FileItem item : content){
+      if(item.getPath().equals(path)){
+        return item;
+      }
+    }
+    return null;
   }
 
   public String toString() {

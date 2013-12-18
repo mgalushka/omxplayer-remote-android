@@ -20,7 +20,9 @@ RemoteControl remote;
 
 // list of filesystem objects
 KetaiList filesystemList;
-ArrayList lst = new ArrayList();
+
+// object that contains current snapshot of browsed directory
+FileSystem fileSystem;
 
 String DEFAULT_BROWSE_ROOT = "/";
 
@@ -31,9 +33,9 @@ void setup() {
     remote.init();
 
     // TODO: persist this betwwen application runs
-    ArrayList first = remote.browse(DEFAULT_BROWSE_ROOT);  
-    filesystemList = new KetaiList(this, first);
-    
+    fileSystem = remote.browse(DEFAULT_BROWSE_ROOT);  
+    filesystemList = new KetaiList(this, fileSystem.ketaiList());
+
     background(0);  
     rectMode(CENTER);
   } 
@@ -50,7 +52,7 @@ void draw() {
 }
 
 void keyPressed() {
-  
+
   // sound controls
   if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
     println ("Volume down");
@@ -64,14 +66,21 @@ void keyPressed() {
 
 void onKetaiListSelection(KetaiList klist)
 {
-  String path = klist.getSelection();  
-  println("Browse path: " + path);
-  ArrayList deeper = remote.browse(path);  
-  filesystemList = new KetaiList(this, deeper);
+  String path = klist.getSelection();
+  println("Selected path: " + path);
+
+  FileItem item = fileSystem.find(path);
+  if (item.getType().equals("DIR")) {
+    print("going deeper level to: " + item.getPath());
+    fileSystem = remote.browse(item.getPath());  
+    filesystemList = new KetaiList(this, fileSystem.ketaiList());
+  }
+  if (item.getType().equals("FILE")) {
+    print("Open file for playing in omxplayer: " + item.getPath());
+  }
 }
 
 void mousePressed() {
-
 }
 
 void exit() {
@@ -79,5 +88,4 @@ void exit() {
     remote.clear();
   }
 }
-
 
