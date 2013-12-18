@@ -19,6 +19,7 @@ public class RemoteControl {
   }
 
   public FileSystem browse(String path) {
+    // TODO: this is stub
     FileSystem result = new FileSystem("/media");
     
     FileItem dir = new FileItem("/media/films", "files", "DIR");

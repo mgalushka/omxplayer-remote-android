@@ -44,6 +44,9 @@ public class FileSystem {
       if(item.getPath().equals(path)){
         return item;
       }
+      if(item.getName().equals(path)){
+        return item;
+      }
     }
     return null;
   }
@@ -74,6 +77,10 @@ public class FileItem {
 
   public String getType() {
     return this.type;
+  }
+  
+  public String toString(){
+    return "{path = [" + path +"], name = [" + name + "], type = [" + type + "]}";
   }
 }
 

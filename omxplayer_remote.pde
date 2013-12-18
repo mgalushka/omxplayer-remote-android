@@ -70,6 +70,8 @@ void onKetaiListSelection(KetaiList klist)
   println("Selected path: " + path);
 
   FileItem item = fileSystem.find(path);
+  println("Found path item: " + item);
+  
   if ("DIR".equals(item.getType())) {
     print("going deeper level to: " + item.getPath());
     fileSystem = remote.browse(item.getPath());  
