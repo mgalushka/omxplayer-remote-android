@@ -23,7 +23,7 @@ public class RemoteControl {
     // TODO: in case of delays from rest service - implement timeout action
     // propose the user to remount/reboot raspberry device 
     FileSystem result = new FileSystem("/media");
-    
+
     FileItem dir = new FileItem("/media/films", "files", "DIR");
     FileItem file = new FileItem("/media/films/1.avi", "1.avi", "FILE");
 
@@ -57,6 +57,34 @@ public class RemoteControl {
 
 
   public void sendToServer(String command) {
+    try {
+      println("Execute command: " + command);
+
+      Gson gson = new Gson(); // Or use new GsonBuilder().create();
+      //gson.
+      String json = "";
+
+      HttpPost httpPost   = new HttpPost(ROOT);
+      httpPost.setRequestEntity(new StringRequestEntity(json));      
+
+      HttpResponse response = httpClient.execute( httpPost );
+      HttpEntity   entity   = response.getEntity();
+
+      Gson gson = new Gson(); // Or use new GsonBuilder().create();
+
+      String json = EntityUtils.toString(entity);
+      println ("json = " + json);
+
+      FileSystem fs = gson.fromJson(json, FileSystem.class);
+
+      println (fs);
+    } 
+    catch (IOException io) {
+      io.printStackTrace();
+    }
+  }
+
+  public void _sendToServer(String command) {
     try {
       println("Execute command: " + command);
       HttpPost httpPost   = new HttpPost(ROOT);
