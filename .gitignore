@@ -1,2 +1,4 @@
 /gson-model/*.iml
 /gson-model/.idea
+
+/gson-model/target
