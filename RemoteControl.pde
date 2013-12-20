@@ -3,9 +3,7 @@ import java.util.*;
 public class RemoteControl {
 
   private DefaultHttpClient httpClient;
-
-  //String ROOT = "http://192.168.1.105/omxplayer-web-controls-php/omx_control.php?JsHttpRequest=13816901606273-xml";
-  private String ROOT = "http://192.168.1.103/omxplayer-web-controls-php/open.php?path=";
+  private String ROOT = "http://192.168.1.103/omx/command.php";
 
   public void init() {
     httpClient = new DefaultHttpClient();
@@ -56,7 +54,7 @@ public class RemoteControl {
   }
 
 
-  public void sendToServer(String command) {
+  public void sendToServer(Command command) {
     try {
       println("Execute command: " + command);
       HttpPost httpPost   = new HttpPost(ROOT);
