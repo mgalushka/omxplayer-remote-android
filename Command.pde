@@ -2,11 +2,6 @@ import java.util.*;
 
 public class Command {
   
-  public final Command PAUSE_COMMAND = new Command("pause");
-  public final Command STOP_COMMAND = new Command("stop");
-  public final Command VOLUP_COMMAND = new Command("volup");
-  public final Command VOLDOWN_COMMAND = new Command("voldown");
-  
   private String request;
   private String path;
   
@@ -32,6 +27,7 @@ public class Command {
 
   public String toString() {
     return "{request = " + this.request + ", path = " + this.path + "}";
-  }
+  }  
+  
 }
 

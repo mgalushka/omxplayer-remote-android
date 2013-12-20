@@ -2,123 +2,74 @@ import java.util.*;
 
 public class RemoteControl {
 
-  private DefaultHttpClient httpClient;
+  //private DefaultHttpClient httpClient;
   private String ROOT = "http://192.168.1.103/omx/command.php";
+  private int TIMEOUT = 5000;
 
   public void init() {
-    httpClient = new DefaultHttpClient();
   }
 
   public void clear() {
-    httpClient = null;
   }
 
   public void execute(Action action) {
   }
-  
+
   public FileSystem browse(String path) {
     Command command = new Command("browse", path);
-    
-    sendToServer(command);
-    return null;
+
+    String json = sendToServer(command);
+
+    Gson gson = new Gson();
+    FileSystem fs = gson.fromJson(json, FileSystem.class);
+
+    println (fs);
+    return fs;
   }
 
-  public FileSystem __browse(String path) {
-    // TODO: this is stub
-    // TODO: in case of delays from rest service - implement timeout action
-    // propose the user to remount/reboot raspberry device 
-    FileSystem result = new FileSystem("/media");
+  public String sendToServer(Command command) {
+    HttpClientBuilder b = HttpClientBuilder.create();
+    CloseableHttpClient httpClient = b.build();
 
-    FileItem dir = new FileItem("/media/films", "files", "DIR");
-    FileItem file = new FileItem("/media/films/1.avi", "1.avi", "FILE");
-
-    List<FileItem> items = new ArrayList<FileItem>();
-    items.add(dir);
-    items.add(file);
-
-    result.setContent(items);
-    return result; //new ArrayList(Arrays.asList("/media/films", "/media/video"));
-  }
-
-  public void browseCall(String path) {
     try {
-      println("Send get request for path: " + ROOT);
-      HttpGet httpGet   = new HttpGet(ROOT);
+      //            httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, TIMEOUT);
+      //            httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, TIMEOUT);
 
-      HttpResponse response = httpClient.execute( httpGet );
-      HttpEntity   entity   = response.getEntity();
-
-      println("----------------------------------------");
-      println( response.getStatusLine() );
-      println("----------------------------------------");
-
-      if ( entity != null ) entity.writeTo( System.out );
-      if ( entity != null ) entity.consumeContent();
-    } 
-    catch (IOException io) {
-      io.printStackTrace();
-    }
-  }
-
-
-  public void sendToServer(Command command) {
-    try {
-      println("Execute command: " + command);
+      System.out.println("Execute command: " + command);
 
       Gson gson = new Gson(); // Or use new GsonBuilder().create();
       String request = gson.toJson(command);
 
-      println("json request: " + request);
+      System.out.println("json request: " + request);
 
-      HttpPost httpPost   = new HttpPost(ROOT);
-      httpPost.setEntity(new StringEntity(request)); 
+      HttpPost httpPost = new HttpPost(ROOT);
+      httpPost.setEntity(new StringEntity(request));
 
-      HttpResponse httpResponse = httpClient.execute( httpPost );
-      HttpEntity   entity   = httpResponse.getEntity();     
+      System.out.println("before execute");
+      HttpResponse httpResponse = httpClient.execute(httpPost);
+      System.out.println("after execute");
+      HttpEntity entity = httpResponse.getEntity();
+      System.out.println("after get entity");
 
-      String response = EntityUtils.toString(entity);
-      println ("json response: " + response);
-
-      FileSystem fs = gson.fromJson(response, FileSystem.class);
-
-      println (fs);
+      if (entity != null) {
+        String response = EntityUtils.toString(entity);
+        System.out.println("json response: " + response);
+        //EntityUtils.consumeQuietly(entity);
+        return response;
+      }
     } 
-    catch (IOException io) {
+    catch (Exception io) {
       io.printStackTrace();
-    }
-  }
-
-  public void _sendToServer(String command) {
-    try {
-      println("Execute command: " + command);
-      HttpPost httpPost   = new HttpPost(ROOT);
-      HttpParams postParams = new BasicHttpParams();
-      postParams.setParameter( "act", command );
-      postParams.setParameter( "arg", "undefined" ); 
-      httpPost.setParams( postParams );
-
-      HttpResponse response = httpClient.execute( httpPost );
-      HttpEntity   entity   = response.getEntity();
-
-      Gson gson = new Gson(); // Or use new GsonBuilder().create();
-
-      println("----------------------------------------");
-      println( response.getStatusLine() );
-      println("----------------------------------------");
-
-      String json = EntityUtils.toString(entity);
-      println ("json = " + json);
-
-      FileSystem fs = gson.fromJson(json, FileSystem.class);
-
-      println (fs);
-
-      //if ( entity != null ) entity.writeTo( System.out );
-      //if ( entity != null ) entity.consumeContent();
     } 
-    catch (IOException io) {
-      io.printStackTrace();
+    finally {
+      try {
+        httpClient.close();
+      } 
+      catch (IOException e) {
+        e.printStackTrace();
+      }
     }
+    return null;
   }
 }
 
