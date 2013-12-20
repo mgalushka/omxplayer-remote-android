@@ -5,6 +5,7 @@ import ketai.data.*;
 import org.apache.http.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.*;
 
 import com.google.gson.Gson;
 
@@ -23,6 +24,7 @@ PImage REWIND_RIGHT;
 PImage REWIND_MORE_RIGHT;
 
 RemoteControl remote;
+Command command = new Command();
 
 // list of filesystem objects
 KetaiList filesystemList;
@@ -96,11 +98,11 @@ void keyPressed() {
   // sound controls
   if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
     println ("Volume down");
-    remote.sendToServer("-");
+    remote.sendToServer(command.VOLDOWN_COMMAND);
   }
   if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
     println ("Volume up");
-    remote.sendToServer("+");
+    remote.sendToServer(command.VOLUP_COMMAND);
   }
 }
 

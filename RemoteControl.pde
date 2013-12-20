@@ -15,8 +15,15 @@ public class RemoteControl {
 
   public void execute(Action action) {
   }
-
+  
   public FileSystem browse(String path) {
+    Command command = new Command("browse", path);
+    
+    sendToServer(command);
+    return null;
+  }
+
+  public FileSystem __browse(String path) {
     // TODO: this is stub
     // TODO: in case of delays from rest service - implement timeout action
     // propose the user to remount/reboot raspberry device 
@@ -59,21 +66,20 @@ public class RemoteControl {
       println("Execute command: " + command);
 
       Gson gson = new Gson(); // Or use new GsonBuilder().create();
-      //gson.
-      String json = "";
+      String request = gson.toJson(command);
+
+      println("json request: " + request);
 
       HttpPost httpPost   = new HttpPost(ROOT);
-      httpPost.setRequestEntity(new StringRequestEntity(json));      
+      httpPost.setEntity(new StringEntity(request)); 
 
-      HttpResponse response = httpClient.execute( httpPost );
-      HttpEntity   entity   = response.getEntity();
+      HttpResponse httpResponse = httpClient.execute( httpPost );
+      HttpEntity   entity   = httpResponse.getEntity();     
 
-      Gson gson = new Gson(); // Or use new GsonBuilder().create();
+      String response = EntityUtils.toString(entity);
+      println ("json response: " + response);
 
-      String json = EntityUtils.toString(entity);
-      println ("json = " + json);
-
-      FileSystem fs = gson.fromJson(json, FileSystem.class);
+      FileSystem fs = gson.fromJson(response, FileSystem.class);
 
       println (fs);
     } 
