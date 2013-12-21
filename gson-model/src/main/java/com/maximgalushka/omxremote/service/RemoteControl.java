@@ -1,20 +1,14 @@
 package com.maximgalushka.omxremote.service;
 
+import ch.boye.httpclientandroidlib.client.methods.HttpPost;
+import ch.boye.httpclientandroidlib.entity.StringEntity;
+import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
+import ch.boye.httpclientandroidlib.util.EntityUtils;
 import com.google.gson.Gson;
 import com.maximgalushka.omxremote.model.Command;
 import com.maximgalushka.omxremote.model.FileSystem;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
+import ch.boye.httpclientandroidlib.*;
+import ch.boye.httpclientandroidlib.client.*;
 
 /**
  * @author Maxim Galushka
@@ -23,6 +17,8 @@ public class RemoteControl {
 
     //private DefaultHttpClient httpClient;
     private String ROOT = "http://192.168.1.103/omx/command.php";
+
+    // TODO: implement timeout model
     private int TIMEOUT = 5000;
 
     public void init() {
@@ -44,8 +40,7 @@ public class RemoteControl {
     }
 
     public String sendToServer(Command command) {
-        HttpClientBuilder b = HttpClientBuilder.create();
-        CloseableHttpClient httpClient = b.build();
+        HttpClient httpClient = new DefaultHttpClient();
 
         try {
 //            httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, TIMEOUT);
@@ -76,11 +71,7 @@ public class RemoteControl {
         } catch (Exception io) {
             io.printStackTrace();
         } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            httpClient.getConnectionManager().shutdown();
         }
         return null;
     }
