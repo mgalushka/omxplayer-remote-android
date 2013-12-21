@@ -120,7 +120,6 @@ public class NoStateControl extends Control {
   }
 
   public void draw() {
-    print("draw: " + this.image);
     applet.image(CONTROL_IMAGE, cX, cY);
   }
 

@@ -18,20 +18,6 @@ import com.google.gson.Gson;
 
 int W, H;
 
-/*
-PImage SPEAKER;
-PImage MUTED;
-
-PImage PLAY;
-PImage PAUSE;
-PImage STOP;
-
-PImage REWIND_LEFT;
-PImage REWIND_MORE_LEFT;
-PImage REWIND_RIGHT;
-PImage REWIND_MORE_RIGHT;
-*/
-
 PlayControl playControl;
 StopControl stopControl;
 
@@ -60,20 +46,6 @@ boolean playingMode = false;
 void setup() {
   W = width;
   H = height;
-
-/*
-  SPEAKER = loadImage("speaker.png");
-  MUTED = loadImage("muted.png");
-
-  PLAY = loadImage("play.png");
-  PAUSE = loadImage("pause.png");
-  STOP = loadImage("stop.png");
-
-  REWIND_LEFT = loadImage("rewind_left.png");
-  REWIND_MORE_LEFT = loadImage("rewind_more_left.png");
-  REWIND_RIGHT = loadImage("rewind_right.png");
-  REWIND_MORE_RIGHT = loadImage("rewind_more_right.png");
-  */
 
   playControl = new PlayControl(this);
   stopControl = new StopControl(this);
@@ -112,12 +84,12 @@ void setup() {
 
 void draw() {
   if (playingMode) {
+    
     // draw playing controls here
     background(255);
     fill(0);
 
     imageMode(CENTER);
-    //image(PLAY, W/2, H/2 + 64);
     
     playControl.draw();
     stopControl.draw();
@@ -125,18 +97,6 @@ void draw() {
     seekBackward.draw();
     seekMoreForward.draw();
     seekMoreBackward.draw();
-
-    /*
-    image(STOP, W - 3*32, H - 3*32);
-     
-     image(REWIND_MORE_LEFT, W - 3*32, 3*32);
-     image(REWIND_LEFT, W - 8*32, 3*32);
-     
-     image(REWIND_MORE_RIGHT, 3*32, 3*32);
-     image(REWIND_RIGHT, 8*32, 3*32);
-     
-     image(SPEAKER, W - 3*32, 8*32);
-     */
   }
 }
 
