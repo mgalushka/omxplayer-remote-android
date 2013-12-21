@@ -3,7 +3,7 @@ package com.maximgalushka.omxremote.model;
 /**
  * @author Maxim Galushka
  */
-public class FileItem {
+public class FileItem implements Comparable<FileItem>{
     private String path;
     private String name;
     private String type;
@@ -28,5 +28,19 @@ public class FileItem {
 
     public String toString() {
         return "{path = [" + path + "], name = [" + name + "], type = [" + type + "]}";
+    }
+
+    @Override
+    public int compareTo(FileItem second) {
+        if(this.type.equals(second.getType())){
+           return this.name.compareTo(second.getName());
+        }
+        if("DIR".equals(this.getType())){
+            return 1;
+        }
+        if("FILE".equals(this.getType())){
+            return -1;
+        }
+        return 0;
     }
 }

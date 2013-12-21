@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author Maxim Galushka
@@ -54,5 +55,15 @@ public class FileSystemTest {
         String json = gson.toJson(result);
 
         System.out.println(json);
+    }
+
+    private static final Pattern FILE_TYPES = Pattern.compile(".*\\.([mM][k|K][v|V]|[aA][vV][iI]|[mM][pP][4])");
+
+    @Test
+    public void patternTest(){
+        System.out.println(FILE_TYPES.matcher("sdsds.aVi").matches());
+        System.out.println(FILE_TYPES.matcher("sdsds.png").matches());
+        System.out.println(FILE_TYPES.matcher("sdsds.MKV").matches());
+        System.out.println(FILE_TYPES.matcher("sdsds.Mp4").matches());
     }
 }

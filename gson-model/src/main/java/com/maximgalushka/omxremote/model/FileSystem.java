@@ -1,9 +1,7 @@
 package com.maximgalushka.omxremote.model;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author Maxim Galushka
@@ -36,13 +34,18 @@ public class FileSystem {
         this.content = content;
     }
 
+    private static final Pattern FILE_TYPES =
+            Pattern.compile(".*\\.([mM][k|K][v|V]|[aA][vV][iI]|[mM][pP][4])");
+
     public ArrayList ketaiList() {
+        Collections.sort(content);
         ArrayList<String> result = new ArrayList<String>();
         for (FileItem item : content) {
             if ("DIR".equals(item.getType())) {
                 result.add(item.getPath());
             }
-            if ("FILE".equals(item.getType())) {
+            if ("FILE".equals(item.getType()) &&
+                    FILE_TYPES.matcher(item.getName()).matches()) {
                 result.add(item.getName());
             }
         }
