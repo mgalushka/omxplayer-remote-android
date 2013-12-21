@@ -9,6 +9,8 @@ import org.apache.http.entity.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
 
+import android.os.AsyncTask;
+
 import com.maximgalushka.omxremote.model.*;
 import com.maximgalushka.omxremote.service.*;
 
@@ -28,12 +30,23 @@ PImage REWIND_MORE_LEFT;
 PImage REWIND_RIGHT;
 PImage REWIND_MORE_RIGHT;
 
+PlayControl playControl;
+StopControl stopControl;
+
+NoStateControl seekForward;
+NoStateControl seekMoreForward;
+NoStateControl seekBackward;
+NoStateControl seekMoreBackward;
+
+
+FsBrowserControl browser;
 RemoteControl remote;
 
 // list of filesystem objects
 KetaiList filesystemList;
 
 // object that contains current snapshot of browsed directory
+AsyncTask<Command, Void, FileSystem> fileSystemAsync;
 FileSystem fileSystem;
 
 String DEFAULT_BROWSE_ROOT = "/";
@@ -55,16 +68,34 @@ void setup() {
 
   REWIND_LEFT = loadImage("rewind_left.png");
   REWIND_MORE_LEFT = loadImage("rewind_more_left.png");
-  REWIND_RIGHT = loadImage("rewind_left.png");
-  REWIND_MORE_RIGHT = loadImage("rewind_more_left.png");
+  REWIND_RIGHT = loadImage("rewind_right.png");
+  REWIND_MORE_RIGHT = loadImage("rewind_more_right.png");
+
+  playControl = new PlayControl(this);
+  stopControl = new StopControl(this);
+
+  seekForward = new NoStateControl(this, "rewind_right.png", W - 8*32, 3*32, "seek30");
+  seekBackward = new NoStateControl(this, "rewind_left.png", 8*32, 3*32, "seek-30");
+  seekMoreForward = new NoStateControl(this, "rewind_more_right.png", W - 3*32, 3*32, "seek600");
+  seekMoreBackward = new NoStateControl(this, "rewind_more_left.png", 3*32, 3*32, "seek-600");
+
+
+  playControl.setup();
+  stopControl.setup();
+  seekForward.setup();
+  seekBackward.setup();
+  seekMoreForward.setup();
+  seekMoreBackward.setup();
 
   try
   {    
+    browser = new FsBrowserControl();
     remote = new RemoteControl();
-    remote.init();
+
 
     // TODO: persist latest browsed path between application runs
-    fileSystem = remote.browse(DEFAULT_BROWSE_ROOT);  
+    fileSystemAsync = browser.execute(new Command("browse", DEFAULT_BROWSE_ROOT)); 
+    fileSystem = fileSystemAsync.get();
     filesystemList = new KetaiList(this, fileSystem.ketaiList());
 
     background(0);  
@@ -82,34 +113,49 @@ void draw() {
     fill(0);
 
     imageMode(CENTER);
-    image(PLAY, W/2, H/2 + 64);
+    //image(PLAY, W/2, H/2 + 64);
+    
+    playControl.draw();
+    stopControl.draw();
+    seekForward.draw();
+    seekBackward.draw();
+    seekMoreForward.draw();
+    seekMoreBackward.draw();
+
+    /*
     image(STOP, W - 3*32, H - 3*32);
-
-    image(REWIND_MORE_LEFT, W - 3*32, 3*32);
-    image(REWIND_LEFT, W - 8*32, 3*32);
-
-    image(REWIND_MORE_RIGHT, 3*32, 3*32);
-    image(REWIND_RIGHT, 8*32, 3*32);
-
-    image(SPEAKER, W - 3*32, 8*32);
+     
+     image(REWIND_MORE_LEFT, W - 3*32, 3*32);
+     image(REWIND_LEFT, W - 8*32, 3*32);
+     
+     image(REWIND_MORE_RIGHT, 3*32, 3*32);
+     image(REWIND_RIGHT, 8*32, 3*32);
+     
+     image(SPEAKER, W - 3*32, 8*32);
+     */
   }
 }
 
 void keyPressed() {
 
-  // sound controls
-  if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
-    println ("Volume down");
-    remote.sendToServer(new Command("volup"));
-  }
-  if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
-    println ("Volume up");
-    remote.sendToServer(new Command("voldown"));
+  if (playingMode) {
+    // sound controls
+    if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
+      println ("Volume down");
+      remote = new RemoteControl();
+      remote.execute(new Command("volup"));
+    }
+    if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
+      println ("Volume up");
+      remote = new RemoteControl();
+      remote.execute(new Command("voldown"));
+    }
   }
 }
 
 void onKetaiListSelection(KetaiList klist)
 {
+
   String path = klist.getSelection();
   println("Selected path: " + path);
 
@@ -118,8 +164,16 @@ void onKetaiListSelection(KetaiList klist)
 
   if ("DIR".equals(item.getType())) {
     print("going deeper level to: " + item.getPath());
-    fileSystem = remote.browse(item.getPath());  
-    filesystemList = new KetaiList(this, fileSystem.ketaiList());
+
+    try {
+      browser = new FsBrowserControl();
+      fileSystemAsync = browser.execute(new Command("browse", item.getPath()));  
+      fileSystem = fileSystemAsync.get();
+      filesystemList = new KetaiList(this, fileSystem.ketaiList());
+    } 
+    catch(Exception ex) {
+      print(ex);
+    }
   }
   if ("FILE".equals(item.getType())) {
     print("Open file for playing in omxplayer: " + item.getPath());
@@ -134,12 +188,18 @@ void mousePressed() {
   if (playingMode) {
     // count click point and action accordingly
     print("Clicked menu: [" + mouseX + ", " + mouseY + "]");
+
+    playControl.mousePressed();
+    stopControl.mousePressed();
+    seekForward.mousePressed();
+    seekBackward.mousePressed();
+    seekMoreForward.mousePressed();
+    seekMoreBackward.mousePressed();
   }
 }
 
 void exit() {
   if (remote != null) {
-    remote.clear();
   }
 }
 
