@@ -109,7 +109,7 @@ public class NoStateControl extends Control {
   
   public NoStateControl(PApplet _applet, String _image, int x, int y, String _command) {
     this(_applet);
-    this.image = image;
+    this.image = _image;
     this.cX = x;
     this.cY = y;
     this.command = _command;
@@ -120,6 +120,7 @@ public class NoStateControl extends Control {
   }
 
   public void draw() {
+    print("draw: " + this.image);
     applet.image(CONTROL_IMAGE, cX, cY);
   }
 

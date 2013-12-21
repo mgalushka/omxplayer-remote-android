@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 int W, H;
 
+/*
 PImage SPEAKER;
 PImage MUTED;
 
@@ -29,6 +30,7 @@ PImage REWIND_LEFT;
 PImage REWIND_MORE_LEFT;
 PImage REWIND_RIGHT;
 PImage REWIND_MORE_RIGHT;
+*/
 
 PlayControl playControl;
 StopControl stopControl;
@@ -59,6 +61,7 @@ void setup() {
   W = width;
   H = height;
 
+/*
   SPEAKER = loadImage("speaker.png");
   MUTED = loadImage("muted.png");
 
@@ -70,6 +73,7 @@ void setup() {
   REWIND_MORE_LEFT = loadImage("rewind_more_left.png");
   REWIND_RIGHT = loadImage("rewind_right.png");
   REWIND_MORE_RIGHT = loadImage("rewind_more_right.png");
+  */
 
   playControl = new PlayControl(this);
   stopControl = new StopControl(this);
