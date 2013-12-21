@@ -11,6 +11,16 @@ public class Command {
     public Command() {
     }
 
+    public Command(String ... params) {
+        this();
+        if(params.length >= 1) {
+            this.request = params[0];
+        }
+        if(params.length >= 2) {
+            this.path = params[1];
+        }
+    }
+
     public Command(String _request) {
         this.request = _request;
     }

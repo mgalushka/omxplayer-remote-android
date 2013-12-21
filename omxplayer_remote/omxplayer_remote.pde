@@ -37,7 +37,7 @@ KetaiList filesystemList;
 AsyncTask<Command, Void, FileSystem> fileSystemAsync;
 FileSystem fileSystem;
 
-String DEFAULT_BROWSE_ROOT = "/";
+String DEFAULT_BROWSE_ROOT = "/media";
 
 // flag shows if we are in playing mode for film
 // should be persistable bewteen apllication runs/or retrievable from raspberry service rest call
@@ -84,13 +84,13 @@ void setup() {
 
 void draw() {
   if (playingMode) {
-    
+
     // draw playing controls here
     background(255);
     fill(0);
 
     imageMode(CENTER);
-    
+
     playControl.draw();
     stopControl.draw();
     seekForward.draw();
@@ -98,21 +98,24 @@ void draw() {
     seekMoreForward.draw();
     seekMoreBackward.draw();
   }
+  else{
+    background(0);  
+    rectMode(CENTER);
+  }
 }
 
 void keyPressed() {
-
   if (playingMode) {
     // sound controls
     if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN) {
       println ("Volume down");
       remote = new RemoteControl();
-      remote.execute(new Command("volup"));
+      remote.execute(new Command("voldown"));
     }
     if (key == CODED && keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
       println ("Volume up");
       remote = new RemoteControl();
-      remote.execute(new Command("voldown"));
+      remote.execute(new Command("volup"));
     }
   }
 }
@@ -142,6 +145,9 @@ void onKetaiListSelection(KetaiList klist)
   if ("FILE".equals(item.getType())) {
     print("Open file for playing in omxplayer: " + item.getPath());
 
+    remote = new RemoteControl();
+    remote.execute(new Command("play", item.getPath()));
+
     // open menu for remote controlling film
     filesystemList = null;
     playingMode = true;
@@ -159,6 +165,21 @@ void mousePressed() {
     seekBackward.mousePressed();
     seekMoreForward.mousePressed();
     seekMoreBackward.mousePressed();
+
+    if (stopControl.isStopped()) {
+      playingMode = false;
+
+      try {
+        remote = new RemoteControl();
+        // TODO: persist latest browsed path between application runs
+        fileSystemAsync = browser.execute(new Command("browse", DEFAULT_BROWSE_ROOT)); 
+        fileSystem = fileSystemAsync.get();
+        filesystemList = new KetaiList(this, fileSystem.ketaiList());
+      } 
+      catch(Exception ex) {
+        print(ex);
+      }
+    }
   }
 }
 

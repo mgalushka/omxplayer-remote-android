@@ -17,7 +17,7 @@ import com.maximgalushka.omxremote.model.Command;
 public final class HttpRemoteHelper {
 
     //private DefaultHttpClient httpClient;
-    private String ROOT = "http://192.168.1.103/omx/command.php";
+    private String ROOT = "http://192.168.1.105/omx/command.php";
 
     // TODO: implement timeout model
     private static final int TIMEOUT = 5000;
@@ -53,11 +53,8 @@ public final class HttpRemoteHelper {
             HttpPost httpPost = new HttpPost(ROOT);
             httpPost.setEntity(new StringEntity(request));
 
-            System.out.println("before execute");
             HttpResponse httpResponse = httpClient.execute(httpPost);
-            System.out.println("after execute");
             HttpEntity entity = httpResponse.getEntity();
-            System.out.println("after get entity");
 
             if (entity != null) {
                 String response = EntityUtils.toString(entity);
