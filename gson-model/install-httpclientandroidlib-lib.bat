@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=lib/httpclientandroidlib-1.1.2.jar -DgroupId=ch.boye.httpclientandroidlib -DartifactId=httpclientandroidlib -Dversion=1.1.2 -Dpackaging=jar

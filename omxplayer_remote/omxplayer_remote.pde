@@ -9,6 +9,9 @@ import org.apache.http.entity.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
 
+import com.maximgalushka.omxremote.model.*;
+import com.maximgalushka.omxremote.service.*;
+
 import com.google.gson.Gson;
 
 int W, H;

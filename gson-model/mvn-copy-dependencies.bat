@@ -1,1 +1,1 @@
-mvn dependency:copy-dependencies
+mvn dependency:copy-dependencies includeScope:runtime 
