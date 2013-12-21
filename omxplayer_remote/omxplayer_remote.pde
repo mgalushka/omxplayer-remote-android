@@ -2,6 +2,8 @@ import ketai.net.*;
 import ketai.ui.*;
 import ketai.data.*;
 
+import apwidgets.*;
+
 import org.apache.http.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -33,6 +35,10 @@ RemoteControl remote;
 // list of filesystem objects
 KetaiList filesystemList;
 
+APWidgetContainer widgets; 
+// remount button
+APButton remountBtn;
+
 // object that contains current snapshot of browsed directory
 AsyncTask<Command, Void, FileSystem> fileSystemAsync;
 FileSystem fileSystem;
@@ -63,11 +69,13 @@ void setup() {
   seekMoreForward.setup();
   seekMoreBackward.setup();
 
+  widgets = new APWidgetContainer(this);
+  remountBtn = new APButton(32, W-32, H-75, 75, "Remount");
+
   try
   {    
     browser = new FsBrowserControl();
     remote = new RemoteControl();
-
 
     // TODO: persist latest browsed path between application runs
     fileSystemAsync = browser.execute(new Command("browse", DEFAULT_BROWSE_ROOT)); 
@@ -84,6 +92,8 @@ void setup() {
 
 void draw() {
   if (playingMode) {
+    
+    widgets.show();
 
     // draw playing controls here
     background(255);
@@ -98,7 +108,8 @@ void draw() {
     seekMoreForward.draw();
     seekMoreBackward.draw();
   }
-  else{
+  else {
+    widgets.hide();
     background(0);  
     rectMode(CENTER);
   }
@@ -180,6 +191,14 @@ void mousePressed() {
         print(ex);
       }
     }
+  }
+}
+
+//onClickWidget is called when a widget is clicked/touched
+void onClickWidget(APWidget widget) {
+  if (widget == remountBtn) { 
+    remote = new RemoteControl();
+    remote.execute(new Command("remount"));
   }
 }
 
