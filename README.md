@@ -3,15 +3,23 @@ omxplayer-remote-android
 
 Remote control for Raspberry PI omxplayer written for Android phones.
 
-Next steps:
+PHP service which is controlling omxplayer is implemented as separated project here:
+https://github.com/mgalushka/omxplayer-web-controls-php
 
-1. Implement browsing filesystem - through apache/php HTTP API.
-2. Implement choose file/directory and play function.
-3. Implement pause/mute functions screen.
-4. Implement sound controls
-5. Implement history and current playing remembering. 
-6. Resume playing after long break/switch off raspberry device.
-7. Search forward/backward controls.
+TODO
+- Implement history and current playing remembering. 
+- Implement mute functions screen (not clear how to support with current omxplayer).
+- Resume playing after long break/switch off raspberry device.
 
+Version 2.0
+- Implemented browsing filesystem - through apache/php HTTP API.
+- Implemented choose file/directory and play function.
+- Implemented pause function screen.
+- Implemented sound controls
+- Resume controls after restart of android application.
+- Search forward/backward controls.
+
+Version 1.0
+- Draft for GUI screens
 
 ![Plan](https://github.com/mgalushka/omxplayer-remote-android/raw/master/doc/plan.png)
